@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 
 export const register = async (req, res, next) => {
   try {
-    const hash = bcrypt.hashSync(req.body.password, 5);
+    const hash = bcrypt.hashSync(req.body.password, 10);
     const newUser = new User({
       ...req.body,
       password: hash,
@@ -39,6 +39,9 @@ export const login = async (req, res, next) => {
     res
       .cookie("accessToken", token, {
         httpOnly: true,
+        sameSite: "none",
+        secure: true,
+        maxAge: 24 * 60 * 60 * 1000,
       })
       .status(200)
       .send(info);

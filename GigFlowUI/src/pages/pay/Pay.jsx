@@ -1,49 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./Pay.scss";
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
 import newRequest from "../../utils/newRequest";
-import { useParams } from "react-router-dom";
-import CheckoutForm from "../../components/checkoutForm/CheckoutForm";
-
-const stripePromise = loadStripe(
-    "paste your public key"
-);
+import { useParams, useNavigate } from "react-router-dom";
 
 const Pay = () => {
-    const [clientSecret, setClientSecret] = useState("");
-
     const { id } = useParams();
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const makeRequest = async () => {
-            try {
-                const res = await newRequest.post(
-                    `/orders/create-payment-intent/${id}`
-                );
-                setClientSecret(res.data.clientSecret);
-            } catch (err) {
-                console.log(err);
-            }
-        };
-        makeRequest();
-    }, []);
-
-    const appearance = {
-        theme: 'stripe',
-    };
-    const options = {
-        clientSecret,
-        appearance,
+    const handleOrder = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            await newRequest.post(`/orders/${id}`);
+            navigate("/success");
+        } catch (err) {
+            setError(err.response?.data || "Something went wrong. Please try again.");
+        } finally {
+            setLoading(false);
+        }
     };
 
-    return <div className="pay">
-        {clientSecret && (
-            <Elements options={options} stripe={stripePromise}>
-                <CheckoutForm />
-            </Elements>
-        )}
-    </div>;
+    return (
+        <div className="pay">
+            <h2>Confirm Your Order</h2>
+            <p>Click the button below to place your order.</p>
+            {error && <p className="error">{error}</p>}
+            <button onClick={handleOrder} disabled={loading}>
+                {loading ? "Placing Order..." : "Confirm Order"}
+            </button>
+        </div>
+    );
 };
 
 export default Pay;

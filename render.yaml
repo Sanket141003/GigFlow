@@ -1,0 +1,32 @@
+services:
+  # Backend API
+  - type: web
+    name: gigflow-api
+    runtime: node
+    rootDir: api
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: MONGO
+        sync: false
+      - key: JWT_KEY
+        sync: false
+      - key: CLIENT_URL
+        sync: false
+
+  # Frontend static site
+  - type: web
+    name: gigflow-ui
+    runtime: static
+    rootDir: GigFlowUI
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        sync: false
+      - key: VITE_UPLOAD_LINK
+        sync: false
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

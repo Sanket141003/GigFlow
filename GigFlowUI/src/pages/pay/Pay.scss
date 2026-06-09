@@ -1,3 +1,39 @@
-.pay{
+.pay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    gap: 16px;
 
- }
+    h2 {
+        font-size: 24px;
+    }
+
+    p {
+        color: #555;
+    }
+
+    .error {
+        color: red;
+    }
+
+    button {
+        padding: 12px 32px;
+        background-color: #1dbf73;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+
+        &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        &:hover:not(:disabled) {
+            background-color: #19a463;
+        }
+    }
+}

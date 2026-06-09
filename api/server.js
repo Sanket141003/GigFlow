@@ -23,7 +23,11 @@ const connect = async () => {
     }
 };
 
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+const allowedOrigins = process.env.CLIENT_URL
+    ? [process.env.CLIENT_URL, "http://localhost:5173"]
+    : ["http://localhost:5173"];
+
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -43,7 +47,7 @@ app.use((err, req, res, next) => {
 });
 
 
-app.listen(8800, () => {
+app.listen(process.env.PORT || 8800, () => {
     connect();
     console.log("Backend Server is Running!");
 });
