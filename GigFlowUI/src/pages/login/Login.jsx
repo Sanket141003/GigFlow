@@ -17,7 +17,7 @@ function Login() {
       localStorage.setItem("currentUser", JSON.stringify(res.data));
       navigate("/")
     } catch (err) {
-      setError(err.response.data);
+      setError(err.response?.data || "Something went wrong. Please try again.");
     }
   };
 

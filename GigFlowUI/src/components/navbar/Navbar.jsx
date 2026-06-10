@@ -20,14 +20,19 @@ function Navbar() {
     };
   }, []);
 
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  const currentUser = (() => {
+    try {
+      const u = localStorage.getItem("currentUser");
+      return u && u !== "null" ? JSON.parse(u) : null;
+    } catch { return null; }
+  })();
 
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
       await newRequest.post("/auth/logout");
-      localStorage.setItem("currentUser", null);
+      localStorage.removeItem("currentUser");
       navigate("/");
     } catch (err) {
       console.log(err);

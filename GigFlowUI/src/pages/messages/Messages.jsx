@@ -6,7 +6,12 @@ import "./Messages.scss";
 import moment from "moment";
 
 const Messages = () => {
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const currentUser = (() => {
+    try {
+      const u = localStorage.getItem("currentUser");
+      return u && u !== "null" ? JSON.parse(u) : null;
+    } catch { return null; }
+  })();
 
     const queryClient = useQueryClient();
 

@@ -25,9 +25,8 @@ function Gigs() {
                 }),
     });
 
-    console.log(data);
-
-    const reSort = (type) => {
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+ = (type) => { reSort = (type) => {
         setSort(type);
         setOpen(false);
     };
